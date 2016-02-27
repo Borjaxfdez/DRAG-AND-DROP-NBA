@@ -1,0 +1,185 @@
+<html>
+<head><title>DRAG AND DROP</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+@font-face { 
+		font-family: 'sp';
+		src: url('SFSportsNight.ttf');
+    }
+body{
+	font-family: 'sp';
+	background: url("wallpaper.jpg"); 
+	background-size:100%;
+}
+.divInterno{
+	display:table-cell;width:240px;height:240px;border:1px solid black;text-align:center;vertical-align:middle;
+}
+h3{
+	font-family: 'sp', sans-serif;
+	font-size: 1.3em;
+	color: orange;
+}
+button{
+	font-family: 'sp', sans-serif;
+	font-size: 3em;
+	color:red;
+	float:left;
+}
+#r{
+	position:absolute;
+	margin-left:488px;
+	font-size: 3em;
+	margin-top:50px;
+}
+</style>
+<script>
+var z=0;
+var x=0;
+var a=["cle.png","lak.png","gsw.png","bos.png"];
+var b=["drag1","drag2","drag3","drag4"];
+var c=["CLEVELAND","LAKERS","WARRIORS","CELTICS"];
+var d=["","","",""];
+var e=["#990033","#ffcc33","#0066cc","#009933"];
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("Text", ev.target.id);
+    }
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("Text");
+	      if(ev.target.getAttribute('data-drop')==data){
+	      ev.target.appendChild(document.getElementById(data));
+		  document.getElementById("r").innerHTML="BIEN";
+		  document.getElementById("r").style.color="green";
+		  x++;
+		  if(x==2){
+		  	var n=Math.floor((Math.random()*2)+1);
+		  	if(n==1){
+		  		var d2="<div>a</div>";
+		  		document.getElementById("fotos2").innerHTML=d2;
+		  	}
+		  	else{
+		  		var d2="<div>b</div>";
+		  		document.getElementById("fotos2").innerHTML=d2;
+		  	}
+		  }
+		  if(x==4){
+			document.getElementById("r").innerHTML="COMPLETO";
+			document.getElementById("r").style.color="blue";
+			bot="<button id='button' onClick='reinicio();'>REINICIAR</button>";
+			document.getElementById("brei").innerHTML=bot;
+		  }
+}
+		else{
+			document.getElementById("r").innerHTML="MAL";
+			document.getElementById("r").style.color="red";
+			z++;
+			if(z==1){
+				document.getElementById("h").src="heartpartido.png";
+			}
+			if(z==2){
+				document.getElementById("h").src="heartvacio.png";
+				finalizar();
+				setTimeout(function(){
+					var c=confirm("¿QUIERES VER EL RESULTADO?");
+					if(c==true){
+						resolver();
+					}
+					else{
+						location.reload();
+					}
+				}, 750);
+			}	
+		}
+}
+function resolver(){
+	for(i=0;i<c.length;i++){
+		document.querySelector("div[data-drop='"+b[i]+"']").innerHTML="<h3>"+c[i]+"</h3><img id='"+b[i]+"' src='"+a[i]+"' draggable='true' ondragstart='drag(event)' width='200px' height='200px'></div>";
+	}
+	bot="<button id='button' onClick='reinicio();'>REINICIAR</button>";
+	document.getElementById("brei").innerHTML=bot;
+}
+function crearDivs(){
+	var divs="<div style='float:left;margin-right:80px'><div style='display:table-row;border:4px solid black'>";
+	for(i=0;i<2;i++){
+		divs+="<div class='divInterno'><img id='"+b[i]+"' src='"+a[i]+"' draggable='true' ondragstart='drag(event)' width='200px' height='200px'></div>";
+	}
+	divs+="</div><div style='display:table-row;border:4px solid black'>";
+	for(i=0;i<2;i++){
+		divs+="<div class='divInterno'><img id='"+b[(i+2)]+"' src='"+a[(i+2)]+"' draggable='true' ondragstart='drag(event)' width='200px' height='200px'></div>";
+	}
+	divs+="</div></div>";
+	document.getElementById("divFotos").innerHTML=divs;
+	aleatorizarArrays();
+	var divs2="<div style='float:left;margin-right:80px'><div style='display:table-row;border:4px solid black'>";
+	for(i=0;i<2;i++){
+		divs2+="<div data-drop="+b[i]+" style='background-color: "+d[i]+";' ondrop='drop(event)' ondragover='allowDrop(event)' class='divInterno'><h3>"+c[i]+"</h3></div>";
+	}
+	divs2+="</div><div style='display:table-row;'>";
+	for(i=0;i<2;i++){
+		divs2+="<div data-drop="+b[(i+2)]+" style='background-color: "+d[(i+2)]+";' ondrop='drop(event)' ondragover='allowDrop(event)' class='divInterno'><h3>"+c[(i+2)]+"</h3></div>";
+	}
+	divs2+="</div></div>";
+	document.getElementById("fotosFinal").innerHTML=divs2;
+}
+	function aleatorizarB(){
+	for (i=b.length-1;i>0;i--) {
+        j=Math.floor(Math.random()*(i + 1));
+        temp = b[i];
+        b[i]=b[j];
+        b[j]=temp;
+    }
+	}
+function aleatorizarArrays(){
+	aleatorizarB();
+	for(i=0;i<b.length;i++){
+		if(b[i]=="drag1"){
+			c[i]="CAVALIERS";
+			a[i]="cle.png";
+			d[i]="";
+		}
+		if(b[i]=="drag2"){
+			c[i]="LAKERS";
+			a[i]="lak.png";
+			d[i]="";
+		}
+		if(b[i]=="drag3"){
+			c[i]="WARRIORS";
+			a[i]="gsw.png";
+			d[i]="";
+		}
+		if(b[i]=="drag4"){
+			c[i]="CELTICS";
+			a[i]="bos.png";
+			d[i]="";
+		}
+	}
+}
+function finalizar(){
+	/*var ar=[];
+	for(i=0;i<b.length;i++){
+		ar.push(document.getElementById(b[i]));
+	}
+	for(i=0;i<ar.length;i++){
+		document.body.style.backgroundImage="url('photo.png') no-repeat center center fixed";
+	}*/
+	document.body.style.backgroundImage="url('gameover.png')";
+}
+function reinicio(){
+	location.reload();
+}
+</script>
+</head>
+<body onLoad="crearDivs()">
+<div id="divFotos">
+<div id="fotos2"></div></div>
+<img src="heartentero.png" id="h" width="100px" height="100px" style="float:left;margin-right:80px;margin-top:200px">
+<div id="fotosFinal"></div>
+<div id="brei"></div>
+<div id="r">NBA GAME</div>
+</body>
+</html>
